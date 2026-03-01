@@ -57,7 +57,7 @@ func (handler *Handler) HandleStoreBook(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusCreated, gin.H{
 		"message": "Book created successfully",
 		"status":  true,
 		"data":    book,
