@@ -4,10 +4,11 @@ import (
 	"context"
 
 	"github.com/Alitindrawan24/go-books-api/internal/entity"
+	"github.com/Alitindrawan24/go-books-api/internal/schema"
 )
 
-func (u *UseCase) GetBooks(ctx context.Context) ([]entity.Book, error) {
-	books, err := u.bookRepository.FindBooks(ctx)
+func (u *UseCase) GetBooks(ctx context.Context, queryParams schema.QueryParams) ([]entity.Book, error) {
+	books, err := u.bookRepository.FindBooks(ctx, queryParams)
 	if err != nil {
 		return nil, err
 	}

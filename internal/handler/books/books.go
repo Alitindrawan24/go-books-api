@@ -5,12 +5,38 @@ import (
 	"strconv"
 
 	"github.com/Alitindrawan24/go-books-api/internal/entity"
+	"github.com/Alitindrawan24/go-books-api/internal/schema"
 	"github.com/gin-gonic/gin"
 )
 
 func (handler *Handler) HandleGetBooks(c *gin.Context) {
 
-	books, err := handler.books.GetBooks(c.Request.Context())
+	var querySchema schema.QueryParams
+	querySchema.Author = c.Query("author")
+	page := c.Query("page")
+	limit := c.Query("limit")
+
+	if page != "" {
+		pageInt, err := strconv.Atoi(page)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid page number"})
+			return
+		}
+
+		querySchema.Page = pageInt
+	}
+
+	if limit != "" {
+		limitInt, err := strconv.Atoi(limit)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid limit number"})
+			return
+		}
+
+		querySchema.Limit = limitInt
+	}
+
+	books, err := handler.books.GetBooks(c.Request.Context(), querySchema)
 	if err != nil {
 		if err.Error() == "book not found" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})

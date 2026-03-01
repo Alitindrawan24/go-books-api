@@ -5,10 +5,11 @@ import (
 
 	"github.com/Alitindrawan24/go-books-api/internal/entity"
 	"github.com/Alitindrawan24/go-books-api/internal/repository/memory/books"
+	"github.com/Alitindrawan24/go-books-api/internal/schema"
 )
 
 type UseCaseProvider interface {
-	GetBooks(context.Context) ([]entity.Book, error)
+	GetBooks(context.Context, schema.QueryParams) ([]entity.Book, error)
 	GetBook(context.Context, int) (entity.Book, error)
 	CreateBook(context.Context, entity.Book) (entity.Book, error)
 	UpdateBook(context.Context, int, entity.Book) (entity.Book, error)

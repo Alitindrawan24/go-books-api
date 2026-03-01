@@ -5,12 +5,35 @@ import (
 	"errors"
 
 	"github.com/Alitindrawan24/go-books-api/internal/entity"
+	"github.com/Alitindrawan24/go-books-api/internal/schema"
 )
 
 var books []entity.Book
 
-func (repository *Repository) FindBooks(ctx context.Context) ([]entity.Book, error) {
-	return books, nil
+func (repository *Repository) FindBooks(ctx context.Context, queryParams schema.QueryParams) ([]entity.Book, error) {
+
+	// clone books
+	allBooks := make([]entity.Book, len(books))
+	copy(allBooks, books)
+
+	if queryParams.Author != "" {
+		allBooks = allBooks[:0]
+		for _, b := range books {
+			if b.Author == queryParams.Author {
+				allBooks = append(allBooks, b)
+			}
+		}
+	}
+
+	if queryParams.Page > 0 && len(allBooks) > 0 {
+		allBooks = allBooks[queryParams.Page-1*queryParams.Limit:]
+	}
+
+	if queryParams.Limit > 0 && len(allBooks) > 0 {
+		allBooks = allBooks[:queryParams.Limit]
+	}
+
+	return allBooks, nil
 }
 
 func (repository *Repository) FindBookByID(ctx context.Context, id int) (entity.Book, error) {
