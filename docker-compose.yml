@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: go-books-api
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      - APP_NAME=${APP_NAME:-Go Books API}
+      - APP_ENV=${APP_ENV:-development}
+      - LOG_DIR=/app/logs/
+      - LOG_MODE=stdout
+      - LOG_ENABLE=enable
+    volumes:
+      - ./storage:/root/storage
+      - ./logs:/app/logs
+    networks:
+      - go-books-api-network
+    restart: unless-stopped
+
+networks:
+  go-books-api-network:
+    driver: bridge
