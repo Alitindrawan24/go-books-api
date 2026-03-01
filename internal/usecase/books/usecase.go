@@ -11,6 +11,8 @@ type UseCaseProvider interface {
 	GetBooks(context.Context) ([]entity.Book, error)
 	GetBook(context.Context, int) (entity.Book, error)
 	CreateBook(context.Context, entity.Book) (entity.Book, error)
+	UpdateBook(context.Context, int, entity.Book) (entity.Book, error)
+	DeleteBook(context.Context, int) error
 }
 
 type UseCase struct {

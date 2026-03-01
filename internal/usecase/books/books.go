@@ -32,3 +32,21 @@ func (u *UseCase) CreateBook(ctx context.Context, book entity.Book) (entity.Book
 
 	return book, nil
 }
+
+func (u *UseCase) UpdateBook(ctx context.Context, id int, book entity.Book) (entity.Book, error) {
+	book, err := u.bookRepository.UpdateBook(ctx, id, book)
+	if err != nil {
+		return entity.Book{}, err
+	}
+
+	return book, nil
+}
+
+func (u *UseCase) DeleteBook(ctx context.Context, id int) error {
+	err := u.bookRepository.DeleteBook(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

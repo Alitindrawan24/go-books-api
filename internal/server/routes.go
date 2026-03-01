@@ -60,4 +60,6 @@ func RegisterBookRoutes(router *Router, m ...gin.HandlerFunc) {
 	router.Gin.GET("books", router.Handler.BookHandler.HandleGetBooks)
 	router.Gin.GET("books/:id", router.Handler.BookHandler.HandleGetBook)
 	router.Gin.POST("books", router.Handler.BookHandler.HandleStoreBook)
+	router.Gin.PUT("books/:id", router.Handler.BookHandler.HandleUpdateBook)
+	router.Gin.DELETE("books/:id", router.Handler.BookHandler.HandleDeleteBook)
 }
