@@ -12,6 +12,11 @@ func (handler *Handler) HandleGetBooks(c *gin.Context) {
 
 	books, err := handler.books.GetBooks(c.Request.Context())
 	if err != nil {
+		if err.Error() == "book not found" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -29,6 +34,11 @@ func (handler *Handler) HandleGetBook(c *gin.Context) {
 
 	book, err := handler.books.GetBook(c.Request.Context(), bookIDInt)
 	if err != nil {
+		if err.Error() == "book not found" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -89,5 +99,5 @@ func (handler *Handler) HandleDeleteBook(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusNoContent, gin.H{"message": "Book deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "Book deleted successfully"})
 }

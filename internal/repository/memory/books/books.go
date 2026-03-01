@@ -22,6 +22,10 @@ func (repository *Repository) FindBookByID(ctx context.Context, id int) (entity.
 		}
 	}
 
+	if book.ID == 0 {
+		return entity.Book{}, errors.New("book not found")
+	}
+
 	return book, nil
 }
 
