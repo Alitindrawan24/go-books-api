@@ -54,7 +54,7 @@ func (handler *Handler) HandleGetBook(c *gin.Context) {
 	bookID := c.Param("id")
 	bookIDInt, err := strconv.Atoi(bookID)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid book ID"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Invalid book ID"})
 		return
 	}
 
@@ -79,6 +79,11 @@ func (handler *Handler) HandleStoreBook(c *gin.Context) {
 		return
 	}
 
+	if book.Author == "" || book.Title == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Author and Title is required"})
+		return
+	}
+
 	book, err := handler.books.CreateBook(c.Request.Context(), book)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -92,7 +97,7 @@ func (handler *Handler) HandleUpdateBook(c *gin.Context) {
 	bookID := c.Param("id")
 	bookIDInt, err := strconv.Atoi(bookID)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid book ID"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Invalid book ID"})
 		return
 	}
 	var book entity.Book
