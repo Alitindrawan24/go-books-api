@@ -16,11 +16,7 @@ func (handler *Handler) HandleGetBooks(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Books retrieved successfully",
-		"status":  true,
-		"data":    books,
-	})
+	c.JSON(http.StatusOK, books)
 }
 
 func (handler *Handler) HandleGetBook(c *gin.Context) {
@@ -37,11 +33,7 @@ func (handler *Handler) HandleGetBook(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Book retrieved successfully",
-		"status":  true,
-		"data":    book,
-	})
+	c.JSON(http.StatusOK, book)
 }
 
 func (handler *Handler) HandleStoreBook(c *gin.Context) {
@@ -57,9 +49,5 @@ func (handler *Handler) HandleStoreBook(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"message": "Book created successfully",
-		"status":  true,
-		"data":    book,
-	})
+	c.JSON(http.StatusCreated, gin.H{"id": book.ID})
 }
