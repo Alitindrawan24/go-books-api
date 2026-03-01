@@ -13,6 +13,7 @@ services:
       - APP_ENV=${APP_ENV:-development}
       - LOG_DIR=/app/logs/
       - LOG_MODE=stdout
+      - STATIC_TOKEN=${STATIC_TOKEN:-}
       - LOG_ENABLE=enable
     volumes:
       - ./storage:/root/storage
