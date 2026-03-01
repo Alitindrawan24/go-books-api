@@ -35,7 +35,7 @@ func NewRouter(handler *app.Handlers, middleware *app.Middleware) *Router {
 func RegisterPingRoutes(router *Router, m ...gin.HandlerFunc) {
 	router.Gin.GET("ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"message": "pong",
+			"success": true,
 		})
 	})
 }
