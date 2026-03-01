@@ -28,5 +28,5 @@ func (handler *Handler) HandleGetToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"token": token})
+	c.JSON(200, token)
 }
