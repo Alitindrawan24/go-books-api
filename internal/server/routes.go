@@ -29,9 +29,14 @@ func NewRouter(handler *app.Handlers, middleware *app.Middleware) *Router {
 
 	router.Gin.Use(middleware.HttpWrapper.HttpWrapper())
 
+	tokenMiddleware := []gin.HandlerFunc{
+		middleware.TokenValidator.ValidateToken(),
+	}
+
 	RegisterPingRoutes(router)
 	RegisterEchoRoutes(router)
-	RegisterBookRoutes(router)
+	RegisterBookRoutes(router, tokenMiddleware...)
+	RegisterAuth(router)
 
 	return router
 }
@@ -57,9 +62,13 @@ func RegisterEchoRoutes(router *Router, m ...gin.HandlerFunc) {
 }
 
 func RegisterBookRoutes(router *Router, m ...gin.HandlerFunc) {
-	router.Gin.GET("books", router.Handler.BookHandler.HandleGetBooks)
+	router.Gin.GET("books", m[0], router.Handler.BookHandler.HandleGetBooks)
 	router.Gin.GET("books/:id", router.Handler.BookHandler.HandleGetBook)
 	router.Gin.POST("books", router.Handler.BookHandler.HandleStoreBook)
 	router.Gin.PUT("books/:id", router.Handler.BookHandler.HandleUpdateBook)
 	router.Gin.DELETE("books/:id", router.Handler.BookHandler.HandleDeleteBook)
+}
+
+func RegisterAuth(router *Router, m ...gin.HandlerFunc) {
+	router.Gin.POST("auth/token", router.Handler.AuthHandler.HandleGetToken)
 }
