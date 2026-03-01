@@ -1,6 +1,8 @@
 package server
 
 import (
+	"io"
+
 	app "github.com/Alitindrawan24/go-books-api/internal/app"
 	"github.com/Alitindrawan24/go-books-api/internal/pkg/config"
 
@@ -43,8 +45,12 @@ func RegisterPingRoutes(router *Router, m ...gin.HandlerFunc) {
 
 func RegisterEchoRoutes(router *Router, m ...gin.HandlerFunc) {
 	router.Gin.POST("echo", func(c *gin.Context) {
-		var json map[string]interface{}
-		c.BindJSON(&json)
-		c.JSON(200, json)
+		body, err := io.ReadAll(c.Request.Body)
+		if err != nil {
+			c.JSON(400, gin.H{"error": "invalid body"})
+			return
+		}
+
+		c.Data(200, "application/json", body)
 	})
 }
