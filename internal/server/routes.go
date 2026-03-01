@@ -28,6 +28,7 @@ func NewRouter(handler *app.Handlers, middleware *app.Middleware) *Router {
 	router.Gin.Use(middleware.HttpWrapper.HttpWrapper())
 
 	RegisterPingRoutes(router)
+	RegisterEchoRoutes(router)
 
 	return router
 }
@@ -37,5 +38,13 @@ func RegisterPingRoutes(router *Router, m ...gin.HandlerFunc) {
 		c.JSON(200, gin.H{
 			"success": true,
 		})
+	})
+}
+
+func RegisterEchoRoutes(router *Router, m ...gin.HandlerFunc) {
+	router.Gin.POST("echo", func(c *gin.Context) {
+		var json map[string]interface{}
+		c.BindJSON(&json)
+		c.JSON(200, json)
 	})
 }
