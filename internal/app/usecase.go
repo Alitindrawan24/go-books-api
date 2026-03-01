@@ -1,9 +1,13 @@
 package app
 
+import "github.com/Alitindrawan24/go-books-api/internal/usecase/books"
+
 type UseCases struct {
+	books books.UseCaseProvider
 }
 
 func NewUseCase(repository *Repositories) *UseCases {
-	useCases := &UseCases{}
-	return useCases
+	return &UseCases{
+		books: books.New(repository.books),
+	}
 }

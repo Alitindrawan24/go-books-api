@@ -31,6 +31,7 @@ func NewRouter(handler *app.Handlers, middleware *app.Middleware) *Router {
 
 	RegisterPingRoutes(router)
 	RegisterEchoRoutes(router)
+	RegisterBookRoutes(router)
 
 	return router
 }
@@ -53,4 +54,10 @@ func RegisterEchoRoutes(router *Router, m ...gin.HandlerFunc) {
 
 		c.Data(200, "application/json", body)
 	})
+}
+
+func RegisterBookRoutes(router *Router, m ...gin.HandlerFunc) {
+	router.Gin.GET("books", router.Handler.BookHandler.HandleGetBooks)
+	router.Gin.GET("books/:id", router.Handler.BookHandler.HandleGetBook)
+	router.Gin.POST("books", router.Handler.BookHandler.HandleStoreBook)
 }
