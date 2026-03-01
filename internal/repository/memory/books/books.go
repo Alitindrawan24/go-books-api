@@ -13,27 +13,42 @@ var books []entity.Book
 func (repository *Repository) FindBooks(ctx context.Context, queryParams schema.QueryParams) ([]entity.Book, error) {
 
 	// clone books
-	allBooks := make([]entity.Book, len(books))
-	copy(allBooks, books)
+	filtered := make([]entity.Book, 0, len(books))
 
+	// filter author
 	if queryParams.Author != "" {
-		allBooks = allBooks[:0]
 		for _, b := range books {
 			if b.Author == queryParams.Author {
-				allBooks = append(allBooks, b)
+				filtered = append(filtered, b)
 			}
 		}
+	} else {
+		filtered = append(filtered, books...)
 	}
 
-	if queryParams.Page > 0 && len(allBooks) > 0 {
-		allBooks = allBooks[queryParams.Page-1*queryParams.Limit:]
+	total := len(filtered)
+
+	page := queryParams.Page
+	limit := queryParams.Limit
+
+	if page <= 0 {
+		page = 1
+	}
+	if limit <= 0 {
+		limit = 10
 	}
 
-	if queryParams.Limit > 0 && len(allBooks) > 0 {
-		allBooks = allBooks[:queryParams.Limit]
+	offset := (page - 1) * limit
+	if offset >= total {
+		return []entity.Book{}, nil
 	}
 
-	return allBooks, nil
+	end := offset + limit
+	if end > total {
+		end = total
+	}
+
+	return filtered[offset:end], nil
 }
 
 func (repository *Repository) FindBookByID(ctx context.Context, id int) (entity.Book, error) {
